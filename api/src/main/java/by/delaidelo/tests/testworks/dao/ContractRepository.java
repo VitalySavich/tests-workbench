@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import by.delaidelo.tests.testworks.domain.Contract;
-import by.delaidelo.tests.testworks.domain.Contract_;
-import by.delaidelo.tests.testworks.domain.Contractor_;
+//import by.delaidelo.tests.testworks.domain.Contract_;
+//import by.delaidelo.tests.testworks.domain.Contractor_;
 import jakarta.persistence.criteria.Predicate;
 
 public interface ContractRepository extends JpaRepository<Contract, Long>, JpaSpecificationExecutor<Contract> {
@@ -23,7 +23,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, JpaSp
                     predicates.add(cq.getRestriction());
                 }
 
-                if (Objects.nonNull(contractorId)) {
+                /*if (Objects.nonNull(contractorId)) {
                     predicates.add(cb.equal(root.get(Contract_.contractor).get(Contractor_.id), contractorId));
                 }
 
@@ -32,7 +32,7 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, JpaSp
                     predicates.add(cb.or(
                             cb.like(cb.upper(root.get(Contract_.contractNumber)), q),
                             cb.like(cb.upper(root.get(Contract_.description)), q)));
-                }
+                }*/
             }
 
             return cb.and(predicates.toArray(new Predicate[] {}));

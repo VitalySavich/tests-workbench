@@ -1,0 +1,65 @@
+<form [formGroup]="formGroup" (ngSubmit)="save()">
+    <div class="p-dialog">
+        <div class="p-dialog-header">
+            <span class="test-xl font-bold">
+                @if (incomingDocumentId) {
+                Редактирование приходного документа
+                } @else {
+                Создание приходного документа
+                }
+            </span>
+        </div>
+        <div class="p-dialog-content">
+            <div class="flex flex-col gap-4 w-full sm:w-auto">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div class="flex-auto">
+                        <p-autocomplete [forceSelection]="true" formControlName="contractor" [suggestions]="contractors" showClear="true"
+                        (completeMethod)="completeContractors($event)" fluid placeholder="Выбирите контрагента"
+                        (onClear)="clearSelection()" optionLabel="title"
+                        >
+                        <ng-template let-item #item>
+                            {{item.title}}
+                        </ng-template>
+                    </p-autocomplete>
+                    </div>
+                    <!--div class="flex-auto">
+                        <p-autocomplete [forceSelection]="true" formControlName="contract" [suggestions]="contracts" showClear="true"
+                        (completeMethod)="completeContracts($event)" fluid placeholder="Выбирите контракт"
+                        (onClear)="clearContractsSelection()" optionLabel="contractNumber"
+                        >
+                        <ng-template let-item #item>
+                            {{item.contractNumber}}
+                        </ng-template>
+                    </p-autocomplete>
+                    </div-->
+                    <div class="flex-auto">
+                        <p-floatLabel>
+                            <input fluid id="contractNumber" pInputText formControlName="contractNumber">
+                            <label for="contractNumber">Номер контракта</label>
+                        </p-floatLabel>
+                    </div>
+                    <div class="flex-auto">
+                        <p-floatLabel>
+                            <input fluid id="incomingDocumentNumber" pInputText formControlName="incomingDocumentNumber">
+                            <label for="incomingDocumentNumber">Номер приходного документа</label>
+                        </p-floatLabel>
+                    </div>
+                    <div class="flex-auto">
+                        <p-floatLabel>
+                            <p-datePicker formControlName="incomingDocumentDate" id="incomingDocumentDate"></p-datePicker>
+                            <label for="incomingDocumentDate">Дата приходного документа</label>
+                        </p-floatLabel>
+                    </div>
+                    <div class="flex-auto">
+                        <p-editor formControlName="description" [style]="{ height: '320px' }" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="p-dialog-footer">
+            <p-button label="Сохранить" type="submit" [disabled]="formGroup.invalid" severity="success"></p-button>
+            <p-button label="Отмена" type="button" (onClick)="cancel()" severity="danger"></p-button>
+        </div>
+    </div>
+</form>

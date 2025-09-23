@@ -1,0 +1,64 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Приходные документы</div>
+    <p-table [value]="data"
+        [lazy]="true"
+        [paginator]="true"
+        [(rows)]="pageSize"
+        [(first)]="first"
+        [totalRecords]="totalRows"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        (onLazyLoad)="loadData($event)">
+        <ng-template #caption>
+            <div class="flex gap-4">
+                <span class="grow">
+                    <input pInputText [(ngModel)]="query" placeholder="Поиск"
+                        (ngModelChange)="loadData({})" fluid>
+                </span>
+                <span class="grow">
+                    <p-autocomplete [forceSelection]="true" [(ngModel)]="contractor" [suggestions]="contractors" (onSelect)="loadData({})" showClear="true"
+                        (completeMethod)="completeContractors($event)" fluid placeholder="Выбирите контрагента" optionLabel="title"
+                        (onClear)="clearSelection()"
+                        >
+                        <ng-template #item let-item>
+                            {{item.title}}
+                        </ng-template>
+                    </p-autocomplete>
+                </span>
+                <span>
+                    <p-button icon="pi pi-plus" (onClick)="edit()" label="Добавить"></p-button>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th>#</th>
+                <!--th>Контрагент</th-->
+                <th>Номер</th>                
+                <th>Дата</th>
+                <th>Номер договора</th>
+                <th>Действия</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr>
+                <td>{{item.id}}</td>
+                <!--td>{{item.contractor.title}}</td-->
+                <td>{{item.incomingDocumentNumber}}</td>
+                <td>{{item.incomingDocumentDate}}</td>
+                <td>{{item.contractNumber}}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" (onClick)="edit(item.id)"></p-button>
+                    <p-button icon="pi pi-trash" (onClick)="delete(item.id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <!--
+        <ng-template #paginatorleft>
+            <p-button type="button" icon="pi pi-plus" text />
+        </ng-template>
+        <ng-template #paginatorright>
+            <p-button type="button" icon="pi pi-cloud" text />
+        </ng-template>
+        -->
+    </p-table>
+</div>

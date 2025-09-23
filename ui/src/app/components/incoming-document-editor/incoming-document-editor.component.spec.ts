@@ -3,21 +3,21 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ContractorEditorComponent } from './contractor-editor.component';
+import { IncomingDocumentEditorComponent } from './incoming-document-editor.component';
 
-describe('ContractorEditorComponent', () => {
-  let component: ContractorEditorComponent;
-  let fixture: ComponentFixture<ContractorEditorComponent>;
+describe('IncomingDocumentEditorComponent', () => {
+  let component: IncomingDocumentEditorComponent;
+  let fixture: ComponentFixture<IncomingDocumentEditorComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContractorEditorComponent ]
+      declarations: [ IncomingDocumentEditorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContractorEditorComponent);
+    fixture = TestBed.createComponent(IncomingDocumentEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
