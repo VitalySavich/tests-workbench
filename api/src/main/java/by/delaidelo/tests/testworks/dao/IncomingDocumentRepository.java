@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 public interface IncomingDocumentRepository extends JpaRepository<IncomingDocument, Long>, JpaSpecificationExecutor<IncomingDocument> {
-    public static Specification<IncomingDocument> buildSpecification(Long incomingDocumentId, String query) {
+    public static Specification<IncomingDocument> buildSpecification(Long contractorId, String query) {
         return (root, cq, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (Objects.nonNull(cq)) {

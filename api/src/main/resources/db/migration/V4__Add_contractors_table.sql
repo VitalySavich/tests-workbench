@@ -44,11 +44,4 @@ INSERT INTO contractors(version, tax_number, title, short_title, address, email,
 INSERT INTO contractors(version, tax_number, title, short_title, address, email, phone, contact_person) VALUES (0, '101883943', 'Филиал Белорусского республиканского унитарного страхового предприятия "Белгосстрах" по г.Минску', 'Филиал "Белгосстрах" по г.Минску', 'г.Минск,ул.Раковская,16', null, null, 'Иванов Иван Иваныч');
 INSERT INTO contractors(version, tax_number, title, short_title, address, email, phone, contact_person) VALUES (0, '101530339', 'Главное управление Министерства финансов Республики Беларусь по г. Минску', 'ГУ Минфина РБ по г. Минску', 'г.Минск,ул.Мясникова,35', null, null, 'Иванов Иван Иваныч');
 
-create table contracts (
-    id bigserial primary key not null,
-    version bigint,
-    contract_date date not null,
-    contract_number varchar(255) not null,
-    contractor_id bigint not null references contractors,
-    description text
-);
+

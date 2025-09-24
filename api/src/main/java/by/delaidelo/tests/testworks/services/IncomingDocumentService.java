@@ -28,6 +28,8 @@ public class IncomingDocumentService {
 
     @Transactional(readOnly = true)
     public Page<IncomingDocumentDto> find(Long contractorId, String query, Pageable pageable) {
+        Page<IncomingDocumentDto> incomingDocuments = incomingDocumentRepository.findAll(IncomingDocumentRepository.buildSpecification(contractorId, query), pageable)
+                .map(incomingDocumentMapper::toDto);
         return incomingDocumentRepository.findAll(IncomingDocumentRepository.buildSpecification(contractorId, query), pageable)
                 .map(incomingDocumentMapper::toDto);
     }

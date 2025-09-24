@@ -29,6 +29,8 @@ public class ContractService {
 
     @Transactional(readOnly = true)
     public Page<ContractDto> find(Long contractorId, String query, Pageable pageable) {
+        Page<ContractDto> contracts = contractRepository.findAll(ContractRepository.buildSpecification(contractorId, query), pageable)
+                .map(contractMapper::toDto);
         return contractRepository.findAll(ContractRepository.buildSpecification(contractorId, query), pageable)
                 .map(contractMapper::toDto);
     }

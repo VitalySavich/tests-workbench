@@ -21,6 +21,8 @@ public class ContractorEntityMapper {
     public SelectListItemDto fromContractor(Contractor contractor) {
         if (Objects.isNull(contractor))
             return null;
+
+        SelectListItemDto contractorDto = new SelectListItemDto(contractor.getId(), contractor.getTitle());
         return new SelectListItemDto(contractor.getId(), contractor.getTitle());
     }
 

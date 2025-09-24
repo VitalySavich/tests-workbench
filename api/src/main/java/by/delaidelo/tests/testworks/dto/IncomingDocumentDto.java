@@ -14,6 +14,6 @@ public class IncomingDocumentDto {
     private SelectListItemDto contractor;
     private LocalDate incomingDocumentDate;
     private String incomingDocumentNumber;
-    private String contractNumber;
+    //private String contractNumber;
     private String description;
 }

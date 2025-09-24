@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "incomingDocuments")
+@Table(name = "incoming_documents")
 @Getter
 @Setter
 public class IncomingDocument extends AbstractEntity {
@@ -18,8 +18,8 @@ public class IncomingDocument extends AbstractEntity {
     private LocalDate incomingDocumentDate;
     @Column
     private String incomingDocumentNumber;
-    @Column
-    private String contractNumber;
+    /*@Column
+    private String contractNumber;*/
     @Column
     private String description;
 }
