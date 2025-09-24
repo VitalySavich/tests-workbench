@@ -1,5 +1,6 @@
 package by.delaidelo.tests.testworks.mvc.controllers;
 
+import by.delaidelo.tests.testworks.dto.SelectListItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ import by.delaidelo.tests.testworks.dto.WarehouseDto;
 import by.delaidelo.tests.testworks.services.warehouse.WarehousesService;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/warehouses")
 @CrossOrigin("*")
@@ -26,6 +29,16 @@ public class WarehouseController {
 
     public WarehouseController(WarehousesService service) {
         this.service = service;
+    }
+
+    /**
+     * Return no more than 20 records
+     * @param query
+     * @return
+     */
+    @GetMapping("/simple")
+    public List<SelectListItemDto> findSimple(@RequestParam(defaultValue = "") String query) {
+        return service.findSimple(query);
     }
 
     @GetMapping("/{id:\\d+}")

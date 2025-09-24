@@ -1,6 +1,7 @@
 import { IncomingDocumentService } from '@/pages/service/incoming-document.service';
 import { ContractService } from '@/pages/service/contract.service';
 import { ContractorService } from '@/pages/service/contractor.service';
+import { WarehouseService } from '@/pages/service/warehouse.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteCompleteEvent, AutoComplete } from 'primeng/autocomplete';
@@ -23,6 +24,7 @@ export class IncomingDocumentEditorComponent implements OnInit {
     incomingDocumentId!: number;
     formGroup: FormGroup;
     contractors!: SelectListItemDto[];
+    warehouses!: SelectListItemDto[];    
     contracts!: SelectListItemDto[];
 
     constructor(
@@ -30,6 +32,7 @@ export class IncomingDocumentEditorComponent implements OnInit {
         private ref: DynamicDialogRef,
         private service: IncomingDocumentService,
         private contractorService: ContractorService,
+        private warehouseService: WarehouseService,
         private contractService: ContractService,
         private fb: FormBuilder
     ) {
@@ -37,7 +40,7 @@ export class IncomingDocumentEditorComponent implements OnInit {
             contractor: [undefined, Validators.required],            
             incomingDocumentNumber: [undefined, Validators.required],
             incomingDocumentDate: [undefined, Validators.required],
-            contractNumber: [undefined, Validators.required],
+            warehouse: [undefined, Validators.required],
             description: [undefined]
         });
     }
@@ -76,6 +79,16 @@ export class IncomingDocumentEditorComponent implements OnInit {
 
     clearSelection() {
         this.formGroup.controls["contractor"].setValue(undefined);
+    }
+
+    completeWarehouses(event: AutoCompleteCompleteEvent) {
+        this.warehouseService.findSimple(event.query).subscribe(res=>{
+            this.warehouses = res;
+        });
+    }
+
+    clearWarehouseSelection() {
+        this.formGroup.controls["warehouse"].setValue(undefined);
     }
 
     /*completeContracts(event: AutoCompleteCompleteEvent) {

@@ -20,6 +20,9 @@ public class IncomingDocument extends AbstractEntity {
     private String incomingDocumentNumber;
     /*@Column
     private String contractNumber;*/
+    @ManyToOne
+    @JoinColumn
+    private Warehouse warehouse;
     @Column
     private String description;
 }

@@ -32,20 +32,22 @@
         <ng-template #header>
             <tr>
                 <th>#</th>
-                <!--th>Контрагент</th-->
+                <th>Контрагент</th>
                 <th>Номер</th>                
                 <th>Дата</th>
-                <th>Номер договора</th>
+                <!--th>Номер договора</th-->
+                <th>Склад</th>
                 <th>Действия</th>
             </tr>
         </ng-template>
         <ng-template #body let-item>
             <tr>
                 <td>{{item.id}}</td>
-                <!--td>{{item.contractor.title}}</td-->
+                <td>{{item.contractor.title}}</td>
                 <td>{{item.incomingDocumentNumber}}</td>
                 <td>{{item.incomingDocumentDate}}</td>
-                <td>{{item.contractNumber}}</td>
+                <!--td>{{item.contractNumber}}</td-->
+                <td>{{item.warehouse.title}}</td>
                 <td>
                     <p-button icon="pi pi-pencil" (onClick)="edit(item.id)"></p-button>
                     <p-button icon="pi pi-trash" (onClick)="delete(item.id)"></p-button>

@@ -14,7 +14,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                     <div class="flex-auto">
                         <p-autocomplete [forceSelection]="true" formControlName="contractor" [suggestions]="contractors" showClear="true"
-                        (completeMethod)="completeContractors($event)" fluid placeholder="Выбирите контрагента"
+                        (completeMethod)="completeContractors($event)" fluid placeholder="Выберите контрагента"
                         (onClear)="clearSelection()" optionLabel="title"
                         >
                         <ng-template let-item #item>
@@ -24,7 +24,7 @@
                     </div>
                     <!--div class="flex-auto">
                         <p-autocomplete [forceSelection]="true" formControlName="contract" [suggestions]="contracts" showClear="true"
-                        (completeMethod)="completeContracts($event)" fluid placeholder="Выбирите контракт"
+                        (completeMethod)="completeContracts($event)" fluid placeholder="Выберите контракт"
                         (onClear)="clearContractsSelection()" optionLabel="contractNumber"
                         >
                         <ng-template let-item #item>
@@ -32,12 +32,12 @@
                         </ng-template>
                     </p-autocomplete>
                     </div-->
-                    <div class="flex-auto">
+                    <!--div class="flex-auto">
                         <p-floatLabel>
                             <input fluid id="contractNumber" pInputText formControlName="contractNumber">
                             <label for="contractNumber">Номер контракта</label>
                         </p-floatLabel>
-                    </div>
+                    </div-->
                     <div class="flex-auto">
                         <p-floatLabel>
                             <input fluid id="incomingDocumentNumber" pInputText formControlName="incomingDocumentNumber">
@@ -49,6 +49,16 @@
                             <p-datePicker formControlName="incomingDocumentDate" id="incomingDocumentDate"></p-datePicker>
                             <label for="incomingDocumentDate">Дата приходного документа</label>
                         </p-floatLabel>
+                    </div>
+                    <div class="flex-auto">
+                        <p-autocomplete [forceSelection]="true" formControlName="warehouse" [suggestions]="warehouses" showClear="true"
+                        (completeMethod)="completeWarehouses($event)" fluid placeholder="Выберите склад"
+                        (onClear)="clearWarehouseSelection()" optionLabel="title"
+                        >
+                        <ng-template let-item #item>
+                            {{item.title}}
+                        </ng-template>
+                    </p-autocomplete>
                     </div>
                     <div class="flex-auto">
                         <p-editor formControlName="description" [style]="{ height: '320px' }" />
