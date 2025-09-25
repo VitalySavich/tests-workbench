@@ -18,8 +18,9 @@ public class IncomingDocument extends AbstractEntity {
     private LocalDate incomingDocumentDate;
     @Column
     private String incomingDocumentNumber;
-    /*@Column
-    private String contractNumber;*/
+    @ManyToOne
+    @JoinColumn
+    private Contract contract;
     @ManyToOne
     @JoinColumn
     private Warehouse warehouse;

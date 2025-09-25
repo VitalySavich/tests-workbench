@@ -22,22 +22,16 @@
                         </ng-template>
                     </p-autocomplete>
                     </div>
-                    <!--div class="flex-auto">
+                    <div class="flex-auto">
                         <p-autocomplete [forceSelection]="true" formControlName="contract" [suggestions]="contracts" showClear="true"
-                        (completeMethod)="completeContracts($event)" fluid placeholder="Выберите контракт"
-                        (onClear)="clearContractsSelection()" optionLabel="contractNumber"
+                        (completeMethod)="completeContracts($event)" fluid placeholder="Выберите договор"
+                        (onClear)="clearContractSelection()" optionLabel="title"
                         >
                         <ng-template let-item #item>
-                            {{item.contractNumber}}
+                            {{item.title}}
                         </ng-template>
                     </p-autocomplete>
-                    </div-->
-                    <!--div class="flex-auto">
-                        <p-floatLabel>
-                            <input fluid id="contractNumber" pInputText formControlName="contractNumber">
-                            <label for="contractNumber">Номер контракта</label>
-                        </p-floatLabel>
-                    </div-->
+                    </div>
                     <div class="flex-auto">
                         <p-floatLabel>
                             <input fluid id="incomingDocumentNumber" pInputText formControlName="incomingDocumentNumber">

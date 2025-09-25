@@ -35,7 +35,7 @@
                 <th>Контрагент</th>
                 <th>Номер</th>                
                 <th>Дата</th>
-                <!--th>Номер договора</th-->
+                <th>Договор</th>
                 <th>Склад</th>
                 <th>Действия</th>
             </tr>
@@ -46,7 +46,7 @@
                 <td>{{item.contractor.title}}</td>
                 <td>{{item.incomingDocumentNumber}}</td>
                 <td>{{item.incomingDocumentDate}}</td>
-                <!--td>{{item.contractNumber}}</td-->
+                <td>{{item.contract.title}}</td>
                 <td>{{item.warehouse.title}}</td>
                 <td>
                     <p-button icon="pi pi-pencil" (onClick)="edit(item.id)"></p-button>

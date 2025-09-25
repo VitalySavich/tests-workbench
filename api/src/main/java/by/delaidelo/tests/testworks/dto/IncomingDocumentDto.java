@@ -14,7 +14,9 @@ public class IncomingDocumentDto {
     private SelectListItemDto contractor;
     private LocalDate incomingDocumentDate;
     private String incomingDocumentNumber;
-    //private String contractNumber;
+    @NotNull
+    @Valid
+    private SelectListItemDto contract;
     @NotNull
     @Valid
     private SelectListItemDto warehouse;

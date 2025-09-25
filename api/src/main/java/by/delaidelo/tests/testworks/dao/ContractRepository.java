@@ -23,11 +23,11 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, JpaSp
                     predicates.add(cq.getRestriction());
                 }
 
-                /*if (Objects.nonNull(contractorId)) {
-                    predicates.add(cb.equal(root.get(Contract_.contractor).get(Contractor_.id), contractorId));
+                if (Objects.nonNull(contractorId)) {
+                    predicates.add(cb.equal(root.get("contractor").get("id"), contractorId));
                 }
 
-                if (StringUtils.isNotBlank(query)) {
+                /*if (StringUtils.isNotBlank(query)) {
                     final var q = '%' + query + '%';
                     predicates.add(cb.or(
                             cb.like(cb.upper(root.get(Contract_.contractNumber)), q),

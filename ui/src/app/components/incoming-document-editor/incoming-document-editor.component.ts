@@ -40,6 +40,7 @@ export class IncomingDocumentEditorComponent implements OnInit {
             contractor: [undefined, Validators.required],            
             incomingDocumentNumber: [undefined, Validators.required],
             incomingDocumentDate: [undefined, Validators.required],
+            contract: [undefined, Validators.required],  
             warehouse: [undefined, Validators.required],
             description: [undefined]
         });
@@ -91,13 +92,14 @@ export class IncomingDocumentEditorComponent implements OnInit {
         this.formGroup.controls["warehouse"].setValue(undefined);
     }
 
-    /*completeContracts(event: AutoCompleteCompleteEvent) {
-        this.contractService.findSimple(event.query).subscribe(res=>{
+    completeContracts(event: AutoCompleteCompleteEvent) {
+        var selectedContractor: SelectListItemDto = this.formGroup.controls["contractor"].getRawValue();
+        this.contractService.findSimple(event.query, Number(selectedContractor.id)).subscribe(res=>{
             this.contracts = res;
         });
     }
 
-    clearContractsSelection() {
+    clearContractSelection() {
         this.formGroup.controls["contract"].setValue(undefined);
-    }*/
+    }
 }
