@@ -1,20 +1,18 @@
 import { AbstractCrudService } from 'src/services/AbstractCrudService';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { WarehouseItemType } from 'src/interfaces/warehouse-item-type';
+import { WarehouseItem } from 'src/interfaces/warehouse-item';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { PageModel } from 'src/interfaces/page-model';
-import { SelectListItemDto } from 'src/interfaces/select-list-item-dto';
 
 @Injectable({
     providedIn: 'root'
 })
-export class WarehouseItemTypeService extends AbstractCrudService<WarehouseItemType> {
+export class WarehouseItemService extends AbstractCrudService<WarehouseItem> {
     readonly _subUrl: string;
     constructor(protected override http: HttpClient) {
         super(http);
-        this._subUrl = environment.apiBaseUrl + '/item-types';
+        this._subUrl = environment.apiBaseUrl + '/warehouse-items';
     }
 
     protected override entityUrl(): string {
@@ -35,16 +33,8 @@ export class WarehouseItemTypeService extends AbstractCrudService<WarehouseItemT
             params = params.append('size', 100);
         }
 
-        return this.http.get<PageModel<WarehouseItemType>>(this._subUrl, {
+        return this.http.get<PageModel<WarehouseItem>>(this._subUrl, {
             params
         });
-    }
-
-    public findSimple(query = ''): Observable<WarehouseItemType[]> {
-        let params = new HttpParams();
-        if (query) {
-            params = params.set('query', query);
-        }
-        return this.http.get<WarehouseItemType[]>(this._subUrl + '/simple', { params });
     }
 }

@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ContractService } from '../service/contract.service';
 import { IncomingDocumentService } from '../service/incoming-document.service';
-import { Contract } from 'src/interfaces/contract';
 import { IncomingDocument } from 'src/interfaces/incoming-document';
-import { ContractEditorComponent } from '@/components/contract-editor/contract-editor.component';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Button } from "primeng/button";
 import { FormsModule } from '@angular/forms';
@@ -12,11 +9,10 @@ import { InputText } from "primeng/inputtext";
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectListItemDto } from 'src/interfaces/select-list-item-dto';
 import { ContractorService } from '../service/contractor.service';
-import { StyleClass } from "primeng/styleclass";
 import { IncomingDocumentEditorComponent } from '@/components/incoming-document-editor/incoming-document-editor.component';
 
 @Component({
-    selector: 'app-contracts',
+    selector: 'app-incoming-documents',
     templateUrl: './incoming-documents.component.html',
     styleUrls: ['./incoming-documents.component.css'],
     providers: [DialogService],

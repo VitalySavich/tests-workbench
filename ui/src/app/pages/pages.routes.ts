@@ -5,6 +5,7 @@ import { ItemTypesComponent } from './item-types/item-types.component';
 import { ContractorsComponent } from './contractors/contractors.component';
 import { ContractsComponent } from './contracts/contracts.component';
 import { IncomingDocumentsComponent } from './incoming-documents/incoming-documents.component';
+import { WarehouseItemsComponent } from './warehouse-items/warehouse-items.component';
 
 export default [
     { path: 'empty', component: Empty },
@@ -13,5 +14,6 @@ export default [
     { path: 'contractors', component: ContractorsComponent},
     { path: 'contracts', component: ContractsComponent},
     { path: 'incoming-documents', component: IncomingDocumentsComponent},
+    { path: 'warehouse-items', component: WarehouseItemsComponent},
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

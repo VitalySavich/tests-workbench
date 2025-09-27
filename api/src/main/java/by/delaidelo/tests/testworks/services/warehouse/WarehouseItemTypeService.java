@@ -1,5 +1,6 @@
 package by.delaidelo.tests.testworks.services.warehouse;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -21,6 +22,13 @@ public class WarehouseItemTypeService {
     public WarehouseItemTypeService(WarehouseItemTypeRepository repository, WarehouseItemTypeMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
+    }
+
+    @Transactional(readOnly = true)
+    public List<WarehouseItemTypeDto> findSimple(String query) {
+        return repository.findByTitleContainsIgnoreCase(Optional.ofNullable(query).orElse(""), null)
+                .map(mapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)

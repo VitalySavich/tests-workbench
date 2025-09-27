@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, waitForAsync, inject } from '@angular/core/testing';
-import { WarehouseItemTypeService } from './warehouse-item-type.service';
+import { WarehouseItemService } from './warehouse-item.service';
 
 describe('Service: WarehouseItemType', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [WarehouseItemTypeService]
+      providers: [WarehouseItemService]
     });
   });
 
-  it('should ...', inject([WarehouseItemTypeService], (service: WarehouseItemTypeService) => {
+  it('should ...', inject([WarehouseItemService], (service: WarehouseItemService) => {
     expect(service).toBeTruthy();
   }));
 });

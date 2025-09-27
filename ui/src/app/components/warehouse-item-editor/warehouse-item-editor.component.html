@@ -1,0 +1,55 @@
+<form [formGroup]="formGroup" (ngSubmit)="save()">
+    <div class="p-dialog">
+        <div class="p-dialog-header">
+            <span class="test-xl font-bold">
+                @if (warehouseItemId) {
+                Редактирование  ТМЦ
+                } @else {
+                Создание ТМЦ
+                }
+            </span>
+        </div>
+        <div class="p-dialog-content">
+            <div class="flex flex-col gap-4 w-full sm:w-auto">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div class="flex-auto">
+                        <p-autocomplete [forceSelection]="true" formControlName="warehouseItemType" [suggestions]="warehouseItemTypes" showClear="true"
+                        (completeMethod)="completeWarehouseItemTypes($event)" fluid placeholder="Выбирите наименование ТМЦ"
+                        (onClear)="clearSelection()" optionLabel="title"
+                        >
+                        <ng-template let-item #item>
+                            {{item.title}}
+                        </ng-template>
+                    </p-autocomplete>
+                    </div>
+                    <div class="flex-auto">
+                        <p-floatLabel>
+                            <input fluid id="quantity" pInputText formControlName="quantity">
+                            <label for="quantity">Кол-во</label>
+                        </p-floatLabel>
+                    </div>
+                    <div class="flex-auto">
+                        <p-floatLabel>
+                            <input fluid id="price" pInputText formControlName="price">
+                            <label for="price">Цена</label>
+                        </p-floatLabel>
+                    </div>
+                    <div class="flex-auto">
+                        <p-floatLabel>
+                            <input fluid id="sum" pInputText formControlName="sum">
+                            <label for="sum">Сумма</label>
+                        </p-floatLabel>
+                    </div>
+                    <!--div class="flex-auto">
+                        <p-editor formControlName="description" [style]="{ height: '320px' }" />
+                    </div-->
+                </div>
+            </div>
+
+        </div>
+        <div class="p-dialog-footer">
+            <p-button label="Сохранить" type="submit" [disabled]="formGroup.invalid" severity="success"></p-button>
+            <p-button label="Отмена" type="button" (onClick)="cancel()" severity="danger"></p-button>
+        </div>
+    </div>
+</form>
