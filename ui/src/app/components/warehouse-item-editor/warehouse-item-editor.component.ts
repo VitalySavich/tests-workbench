@@ -17,6 +17,7 @@ import { EditorModule } from 'primeng/editor';
     imports: [FloatLabel, InputText, Button, FormsModule, ReactiveFormsModule, AutoComplete, EditorModule]
 })
 export class WarehouseItemEditorComponent implements OnInit {
+    incomingDocumentId!: number;
     warehouseItemId!: number;
     formGroup: FormGroup;
     warehouseItemTypes!: WarehouseItemType[];
@@ -32,11 +33,12 @@ export class WarehouseItemEditorComponent implements OnInit {
             warehouseItemType: [undefined, Validators.required],
             quantity: [undefined, Validators.required],
             price: [undefined, Validators.required],
-            sum: [undefined, Validators.required]
+            amount: [undefined, Validators.required]
         });
     }
 
     ngOnInit() {
+        this.incomingDocumentId = this.config.data.incomingDocumentId;
         this.warehouseItemId = this.config.data.warehouseItemId;
         if(this.warehouseItemId) {
             this.service.findById(this.warehouseItemId).subscribe(c=>{
@@ -52,7 +54,7 @@ export class WarehouseItemEditorComponent implements OnInit {
                 this.ref.close(true);
             });
         } else {
-            this.service.create(wi).subscribe(()=>{
+            this.service.createForIncomingDocument(wi, this.incomingDocumentId).subscribe(()=>{
                 this.ref.close(true);
             });
         }

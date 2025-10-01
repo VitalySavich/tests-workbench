@@ -1,10 +1,12 @@
 package by.delaidelo.tests.testworks.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,10 +30,11 @@ public class IncomingDocument extends AbstractEntity {
     @Column
     private String description;
 
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
             name = "incoming_document_warehouse_item",
             joinColumns = @JoinColumn(name = "incoming_document_id"),
             inverseJoinColumns = @JoinColumn(name = "warehouse_item_id"))
-    Set<WarehouseItem> warehouseItems;
+    @JsonManagedReference
+    Set<WarehouseItem> warehouseItems = new HashSet<WarehouseItem>();;
 }

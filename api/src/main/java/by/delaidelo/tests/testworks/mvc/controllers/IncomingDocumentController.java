@@ -1,11 +1,15 @@
 package by.delaidelo.tests.testworks.mvc.controllers;
 
+import by.delaidelo.tests.testworks.domain.WarehouseItem;
 import by.delaidelo.tests.testworks.dto.IncomingDocumentDto;
 import by.delaidelo.tests.testworks.dto.SelectListItemDto;
+import by.delaidelo.tests.testworks.dto.WarehouseItemDto;
 import by.delaidelo.tests.testworks.services.IncomingDocumentService;
+import by.delaidelo.tests.testworks.services.warehouse.WarehouseItemService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +20,11 @@ import java.util.List;
 @CrossOrigin("*")
 public class IncomingDocumentController {
     private final IncomingDocumentService service;
+    private final WarehouseItemService warehouseItemService;
 
-    public IncomingDocumentController(IncomingDocumentService service) {
+    public IncomingDocumentController(IncomingDocumentService service, WarehouseItemService warehouseItemService) {
         this.service = service;
+        this.warehouseItemService = warehouseItemService;
     }
 
     @GetMapping
@@ -60,5 +66,12 @@ public class IncomingDocumentController {
     public IncomingDocumentDto findById(@PathVariable Long id) {
         return service.findById(id);
     }
+
+    @GetMapping("/{id}/warehouse-items")
+    public ResponseEntity<List<WarehouseItem>> getAllWarehouseItemsByIncomingDocumentId(@PathVariable(value = "id") Long id) {
+        List<WarehouseItem> warehouseItems = warehouseItemService.findAllWarehouseItemsByIncomingDocumentId(id);
+        return new ResponseEntity<>(warehouseItems, HttpStatus.OK);
+    }
+
 
 }

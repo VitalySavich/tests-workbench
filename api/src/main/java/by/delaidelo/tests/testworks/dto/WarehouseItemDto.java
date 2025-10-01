@@ -1,12 +1,11 @@
 package by.delaidelo.tests.testworks.dto;
 
-import by.delaidelo.tests.testworks.enums.WarehouseItemGroup;
-import by.delaidelo.tests.testworks.enums.WarehouseItemSubgroup;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class WarehouseItemDto {
@@ -16,5 +15,6 @@ public class WarehouseItemDto {
     private SelectListItemDto warehouseItemType;
     private BigDecimal quantity;
     private BigDecimal price;
-    private BigDecimal sum;
+    private BigDecimal amount;
+    private List<Long> incomingDocumentIds;
 }

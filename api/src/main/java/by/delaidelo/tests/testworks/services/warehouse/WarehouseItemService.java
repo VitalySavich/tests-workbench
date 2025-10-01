@@ -1,6 +1,9 @@
 package by.delaidelo.tests.testworks.services.warehouse;
 
+import by.delaidelo.tests.testworks.dao.IncomingDocumentRepository;
 import by.delaidelo.tests.testworks.dao.WarehouseItemRepository;
+import by.delaidelo.tests.testworks.domain.IncomingDocument;
+import by.delaidelo.tests.testworks.domain.WarehouseItem;
 import by.delaidelo.tests.testworks.dto.WarehouseItemDto;
 import by.delaidelo.tests.testworks.mappers.WarehouseItemMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,15 +13,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class WarehouseItemService {
     private final WarehouseItemRepository repository;
+    private final IncomingDocumentRepository incomingDocumentRepository;
     private final WarehouseItemMapper mapper;
 
-    public WarehouseItemService(WarehouseItemRepository repository, WarehouseItemMapper mapper) {
+    public WarehouseItemService(WarehouseItemRepository repository, IncomingDocumentRepository incomingDocumentRepository, WarehouseItemMapper mapper) {
         this.repository = repository;
+        this.incomingDocumentRepository = incomingDocumentRepository;
         this.mapper = mapper;
     }
 
@@ -35,10 +42,19 @@ public class WarehouseItemService {
                 .map(mapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public List<WarehouseItem> findAllWarehouseItemsByIncomingDocumentId(Long incomingDocumentId) {
+        return repository.findWarehouseItemsByIncomingDocumentsId(incomingDocumentId);
+    }
+
     @Transactional
-    public Long create(@NotNull WarehouseItemDto dto) {
-        final var item = mapper.fromDto(dto);
+    public Long create(@NotNull WarehouseItemDto dto, Long incomingDocumentId) {
+
+        var item = mapper.fromDto(dto);
+        var incomingDocument = incomingDocumentRepository.findById(incomingDocumentId).orElseThrow();
         repository.save(item);
+        incomingDocument.getWarehouseItems().add(item);
+        incomingDocumentRepository.save(incomingDocument);
         return item.getId();
     }
 

@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { WarehouseItemEditorComponent } from '@/components/warehouse-item-editor/warehouse-item-editor.component';
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
+import {Router, ActivatedRoute, Params} from '@angular/router';
+import { IncomingDocumentService } from '../service/incoming-document.service';
 
 @Component({
     selector: 'app-warehouse-items',
@@ -18,6 +20,7 @@ import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocompl
 })
 export class WarehouseItemsComponent {
     data!: WarehouseItem[];
+    incomingDocumentId!: number;
     query = '';
     pageSize = 10;
     pageNumber = 0;
@@ -25,11 +28,17 @@ export class WarehouseItemsComponent {
     warehouseItems!: WarehouseItem[];
     totalRows!: number;
     constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
         private service: WarehouseItemService,
         private dialogService: DialogService
-    ) {}
+    ) {     
+    }
 
     loadWarehouseItems(event: TableLazyLoadEvent) {
+        this.activatedRoute.paramMap
+        .subscribe( params => { this.incomingDocumentId = Number(params.get('id')) });
+  
         if (event.first !== undefined) {
             this.first = event.first;
         }
@@ -37,14 +46,19 @@ export class WarehouseItemsComponent {
             this.pageSize = event.rows;
         }
         const pageNumber = this.first / this.pageSize;
-        this.service.find(this.query, pageNumber, this.pageSize).subscribe((res) => {
+        /*this.service.find(this.query, pageNumber, this.pageSize).subscribe((res) => {
             this.warehouseItems = res.content;
             this.totalRows = res.page.totalElements;
+            if (event.forceUpdate) event.forceUpdate();
+        });*/
+
+        this.service.findByIncomingDocumentId(this.incomingDocumentId).subscribe((res) => {
+            this.warehouseItems = res;
             if (event.forceUpdate) event.forceUpdate();
         });
     }   
 
-    edit(warehouseItemId?: number) {
+    edit(incomingDocumentId?: number, warehouseItemId?: number) {
         this.dialogService
             .open(WarehouseItemEditorComponent, {
                 width: '50vw',
@@ -54,7 +68,8 @@ export class WarehouseItemsComponent {
                     '640px': '90vw'
                 },
                 data: {
-                    warehouseItemId
+                    incomingDocumentId,
+                    warehouseItemId                    
                 },
             })
             .onClose.subscribe((res) => {

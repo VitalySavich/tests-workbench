@@ -1,10 +1,12 @@
 package by.delaidelo.tests.testworks.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -23,8 +25,9 @@ public class WarehouseItem extends AbstractEntity {
     private BigDecimal price;
 
     @Column
-    private BigDecimal sum;
+    private BigDecimal amount;
 
     @ManyToMany(mappedBy = "warehouseItems")
-    Set<IncomingDocument> incomingDocuments;
+    @JsonBackReference
+    Set<IncomingDocument> incomingDocuments = new HashSet<IncomingDocument>();;
 }

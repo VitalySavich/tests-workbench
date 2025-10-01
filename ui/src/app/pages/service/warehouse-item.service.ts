@@ -4,6 +4,7 @@ import { WarehouseItem } from 'src/interfaces/warehouse-item';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { PageModel } from 'src/interfaces/page-model';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,7 @@ export class WarehouseItemService extends AbstractCrudService<WarehouseItem> {
     }
 
     public find(query = '', page?: number, size?:number) {
+        
         let params = new HttpParams();
         if(query) {
             params = params.append('query', query);
@@ -36,5 +38,18 @@ export class WarehouseItemService extends AbstractCrudService<WarehouseItem> {
         return this.http.get<PageModel<WarehouseItem>>(this._subUrl, {
             params
         });
+    }
+
+    public findByIncomingDocumentId(incomingDocumentId: number): Observable<WarehouseItem[]> {
+        let params = new HttpParams();
+        let url = environment.apiBaseUrl + '/incoming-documents/' + incomingDocumentId + '/warehouse-items';
+        return this.http.get<WarehouseItem[]>(url, { params });
+    }
+
+     public createForIncomingDocument(entity: WarehouseItem, incomingDocumentId: number): Observable<number> {
+        let params = new HttpParams();
+        params = params.append('incomingDocumentId', incomingDocumentId);
+
+        return this.http.post<number>(`${this.entityUrl()}`, entity, { params });
     }
 }

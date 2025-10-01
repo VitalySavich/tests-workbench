@@ -1,10 +1,7 @@
 package by.delaidelo.tests.testworks.dao;
 
-//import by.delaidelo.tests.testworks.domain.IncomingDocument_;
-//import by.delaidelo.tests.testworks.domain.Contractor_;
 import by.delaidelo.tests.testworks.domain.IncomingDocument;
 import jakarta.persistence.criteria.Predicate;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public interface IncomingDocumentRepository extends JpaRepository<IncomingDocument, Long>, JpaSpecificationExecutor<IncomingDocument> {
-    public static Specification<IncomingDocument> buildSpecification(Long contractorId, String query) {
+    static Specification<IncomingDocument> buildSpecification(Long contractorId, String query) {
         return (root, cq, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (Objects.nonNull(cq)) {
@@ -37,4 +34,6 @@ public interface IncomingDocumentRepository extends JpaRepository<IncomingDocume
             return cb.and(predicates.toArray(new Predicate[] {}));
         };
     }
+
+    List<IncomingDocument> findIncomingDocumentsByWarehouseItemsId(Long warehouseItemId);
 }

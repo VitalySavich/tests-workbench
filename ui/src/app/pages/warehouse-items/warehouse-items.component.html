@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="font-semibold text-xl mb-4">Таблица ТМЦ</div>
+    <div class="font-semibold text-xl mb-4">Таблица ТМЦ для приходного документа номер {{incomingDocumentId}}</div>
     <p-table [value]="warehouseItems"
         [lazy]="true"
         [paginator]="true"
@@ -15,7 +15,7 @@
                         (ngModelChange)="loadWarehouseItems({})">
                 </span>
                 <span>
-                    <p-button icon="pi pi-plus" (onClick)="edit()" label="Добавить"></p-button>
+                    <p-button icon="pi pi-plus" (onClick)="edit(incomingDocumentId)" label="Добавить"></p-button>
                 </span>
             </div>
         </ng-template>
@@ -34,10 +34,10 @@
                 <td>{{item.id}}</td>
                 <td>{{item.warehouseItemType.title}}</td>
                 <td>{{item.quantity}}</td>
-                <td>{{item.price}}</td>
-                <td>{{item.sum}}</td>               
+                <td>{{item.price}} руб.</td>
+                <td>{{item.amount}} руб.</td>               
                 <td>
-                    <p-button icon="pi pi-pencil" (onClick)="edit(item.id)"></p-button>
+                    <p-button icon="pi pi-pencil" (onClick)="edit(incomingDocumentId, item.id)"></p-button>
                     <p-button icon="pi pi-trash" (onClick)="delete(item.id)"></p-button>
                 </td>
             </tr>

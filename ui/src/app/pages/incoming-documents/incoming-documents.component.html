@@ -37,6 +37,7 @@
                 <th>Дата</th>
                 <th>Договор</th>
                 <th>Склад</th>
+                <th>Таблица ТМЦ</th>
                 <th>Действия</th>
             </tr>
         </ng-template>
@@ -48,6 +49,9 @@
                 <td>{{item.incomingDocumentDate}}</td>
                 <td>{{item.contract.title}}</td>
                 <td>{{item.warehouse.title}}</td>
+                <td>
+                   <p-button icon="pi pi-table" (onClick)="openTable(item.id)" label="Открыть"></p-button>
+                </td>
                 <td>
                     <p-button icon="pi pi-pencil" (onClick)="edit(item.id)"></p-button>
                     <p-button icon="pi pi-trash" (onClick)="delete(item.id)"></p-button>

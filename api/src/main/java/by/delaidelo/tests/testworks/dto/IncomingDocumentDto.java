@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class IncomingDocumentDto {
@@ -21,4 +22,5 @@ public class IncomingDocumentDto {
     @Valid
     private SelectListItemDto warehouse;
     private String description;
+    private List<Long> warehouseItemIds;
 }

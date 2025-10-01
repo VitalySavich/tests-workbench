@@ -29,8 +29,8 @@ public class WarehouseItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> create(@RequestBody @Valid WarehouseItemDto dto) {
-        final var id = service.create(dto);
+    public ResponseEntity<Long> create(@RequestBody @Valid WarehouseItemDto dto, @RequestParam Long incomingDocumentId) {
+        final var id = service.create(dto, incomingDocumentId);
         return ResponseEntity.ok(id);
     }
 

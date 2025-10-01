@@ -14,6 +14,6 @@ export default [
     { path: 'contractors', component: ContractorsComponent},
     { path: 'contracts', component: ContractsComponent},
     { path: 'incoming-documents', component: IncomingDocumentsComponent},
-    { path: 'warehouse-items', component: WarehouseItemsComponent},
+    { path: "incoming-documents/:id/warehouse-items", component: WarehouseItemsComponent},
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

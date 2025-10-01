@@ -10,6 +10,7 @@ import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocompl
 import { SelectListItemDto } from 'src/interfaces/select-list-item-dto';
 import { ContractorService } from '../service/contractor.service';
 import { IncomingDocumentEditorComponent } from '@/components/incoming-document-editor/incoming-document-editor.component';
+import {Router, ActivatedRoute, Params} from '@angular/router';
 
 @Component({
     selector: 'app-incoming-documents',
@@ -27,6 +28,7 @@ export class IncomingDocumentsComponent {
     contractor: SelectListItemDto|undefined;
     contractors!: SelectListItemDto[];
     constructor(
+        private router: Router,
         private service: IncomingDocumentService,
         private dialogService: DialogService,
         private contractorService: ContractorService
@@ -65,6 +67,11 @@ export class IncomingDocumentsComponent {
                     this.loadData({});
                 }
             });
+    }
+
+    openTable(incomingDocumentId?: number) {
+        let url = '/pages/incoming-documents/' + incomingDocumentId + '/warehouse-items';
+        this.router.navigate([url]);             
     }
 
     delete(id: number) {
