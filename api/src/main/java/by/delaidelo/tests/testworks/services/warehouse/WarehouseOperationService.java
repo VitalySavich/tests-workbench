@@ -2,6 +2,13 @@ package by.delaidelo.tests.testworks.services.warehouse;
 
 import java.util.List;
 
+import by.delaidelo.tests.testworks.dao.ContractRepository;
+import by.delaidelo.tests.testworks.dto.ContractDto;
+import by.delaidelo.tests.testworks.dto.WarehouseOperationDto;
+import by.delaidelo.tests.testworks.mappers.ContractMapper;
+import by.delaidelo.tests.testworks.mappers.WarehouseOperationMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import by.delaidelo.tests.testworks.dao.WarehouseOperationRepository;
@@ -18,6 +25,14 @@ public class WarehouseOperationService {
 
     private final WarehouseOperationRepository opres;
     private final List<AbstractWarehouseOperationProcessor> processors;
+    private final WarehouseOperationMapper warehouseOperationMapperMapper;
+
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public List<WarehouseOperationDto> findAll() {
+        return opres.findAll().stream()
+                .map(warehouseOperationMapperMapper::toDto)
+                .toList();
+    }
 
     @Transactional
     public Long create(@NotNull WarehouseOperation operation) {

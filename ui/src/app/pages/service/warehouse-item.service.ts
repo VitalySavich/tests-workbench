@@ -46,10 +46,18 @@ export class WarehouseItemService extends AbstractCrudService<WarehouseItem> {
         return this.http.get<WarehouseItem[]>(url, { params });
     }
 
-     public createForIncomingDocument(entity: WarehouseItem, incomingDocumentId: number): Observable<number> {
+    public createForIncomingDocument(entity: WarehouseItem, incomingDocumentId: number): Observable<number> {
         let params = new HttpParams();
         params = params.append('incomingDocumentId', incomingDocumentId);
 
         return this.http.post<number>(`${this.entityUrl()}`, entity, { params });
+    }
+
+    public createWarehouseOperation(entity: WarehouseItem, incomingDocumentId: number): Observable<number> {
+        let params = new HttpParams();
+        let url = environment.apiBaseUrl + '/warehouse-operations/create-operation';
+        params = params.append('incomingDocumentId', incomingDocumentId);
+
+        return this.http.post<number>(url, entity, { params });
     }
 }

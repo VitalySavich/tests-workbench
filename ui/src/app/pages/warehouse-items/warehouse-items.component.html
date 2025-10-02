@@ -26,6 +26,7 @@
                 <th>Кол-во</th>
                 <th>Цена</th>
                 <th>Сумма</th>
+                <th>Действия по складу</th>
                 <th>Действия</th>
             </tr>
         </ng-template>
@@ -35,7 +36,11 @@
                 <td>{{item.warehouseItemType.title}}</td>
                 <td>{{item.quantity}}</td>
                 <td>{{item.price}} руб.</td>
-                <td>{{item.amount}} руб.</td>               
+                <td>{{item.amount}} руб.</td>  
+                <td>
+                    <p-button icon="pi pi-check" (onClick)="accept(item)" label="Принять"></p-button>
+                    <!--p-button icon="pi pi-times" (onClick)="cancel(item)" label="Отменить"></p-button-->
+                </td>             
                 <td>
                     <p-button icon="pi pi-pencil" (onClick)="edit(incomingDocumentId, item.id)"></p-button>
                     <p-button icon="pi pi-trash" (onClick)="delete(item.id)"></p-button>

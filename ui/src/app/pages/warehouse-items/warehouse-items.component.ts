@@ -85,4 +85,12 @@ export class WarehouseItemsComponent {
             this.loadWarehouseItems(event);
         });
     }
+
+    accept(item: WarehouseItem) {
+        this.service.createWarehouseOperation(item, this.incomingDocumentId).subscribe(()=>{                
+        });
+    }
+
+    cancel(item: WarehouseItem) {
+    }
 }
