@@ -1,5 +1,6 @@
 package by.delaidelo.tests.testworks.mvc.controllers;
 
+import by.delaidelo.tests.testworks.dto.ResultDTO;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +11,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 @RestController
@@ -62,63 +65,91 @@ public class FileController {
     }
 
     @PostMapping("/analyze")
-    public Boolean analyze() {
+    public ResultDTO analyze() {
 
         Path filePath = Paths.get("D:/PROJECTS/InvLab/smalltest.txt"); // Укажите путь к вашему файлу
 
-        // Использование try-with-resources для автоматического закрытия потока
-        try (Stream<String> lines = Files.lines(filePath)) {
-            // Применение операций Stream API
-//            lines
-//                    .filter(line -> !line.trim().isEmpty()) // Пример: пропустить пустые строки
-//                    .map(String::toUpperCase) // Пример: преобразовать все строки в верхний регистр
-//                    .forEach(System.out::println); // Пример: вывести каждую строку
+        ResultDTO resultDTO = new ResultDTO();
 
-            //System.out.println("Валидные строки:");
+        // --- Создание Supplier<Stream<String>> ---
+        // Эта лямбда-функция будет выполняться каждый раз при вызове .get()
+        Supplier<Stream<String>> linesSupplier = () -> {
+            try {
+                // При каждом вызове get() открывается НОВЫЙ поток из файла
+                return Files.lines(filePath);
+            } catch (IOException e) {
+                // В случае ошибки IO, возвращаем пустой поток или выбрасываем RuntimeException
+                System.err.println("Ошибка чтения файла: " + e.getMessage());
+                return Stream.empty();
+            }
+        };
 
-            //List<String> uniqueValuesList = lines
+        // Создаем поставщика потоков с отфильтрованными невалидными строками
+        Supplier<Stream<String>> validLinesSupplier = () -> linesSupplier.get() // Пропускать некорректные строки, не подходящие для анализа
+                // (не полные или ошибочные данные).
+                .filter(line -> line.split(",").length == 2)
+                // Приверка что первый элемент является валидным датой-временем
+                // Стандарт ISO_LOCAL_DATE_TIME
+                .filter(line -> isValidDateTime(line.split(",")[0], "yyyy-MM-dd'T'HH:mm:ss"))
+                // Приверка что второй элемент является валидным числом типа double
+                .filter(line -> isValidDouble(line.split(",")[1]));
 
-            DoubleSummaryStatistics stats = lines
-                    // Пропускать некорректные строки, не подходящие для анализа
-                    // (не полные или ошибочные данные).
-                    .filter(line -> line.split(",").length == 2)
-                    // Приверка что первый элемент является валидным датой-временем
-                    // Стандарт ISO_LOCAL_DATE_TIME
-                    .filter(line -> isValidDateTime(line.split(",")[0], "yyyy-MM-dd'T'HH:mm:ss"))
-                    // Приверка что второй элемент является валидным числом типа double
-                    .filter(line -> isValidDouble(line.split(",")[1]))
+        // Собираем основную статистику
+        try (Stream<String> firstStream = validLinesSupplier.get()) {
+            DoubleSummaryStatistics stats = firstStream
+                    .map(line -> line.split(",")[1])
+                    .mapToDouble(Double::parseDouble)
+                    .summaryStatistics();
+
+            resultDTO.setCount(stats.getCount());
+            resultDTO.setMinValue(stats.getMin());
+            resultDTO.setMaxValue(stats.getMax());
+            resultDTO.setAverage(stats.getAverage());
+        } // Поток firstStream закрывается здесь
+
+        // Вычисляет стандартное отклонение для выборки (sample standard deviation).
+        try (Stream<String> secondStream = validLinesSupplier.get()) {
+
+            // Шаг 1: Вычисление среднего значения (Mean)
+            double mean = resultDTO.getAverage();
+
+            // Шаг 2: Вычисление суммы квадратов разностей (Sum of Squares of Differences)
+            double sumOfSquares = secondStream
                     // Получаем только значение
                     .map(line -> line.split(",")[1])
-                    .mapToDouble(Double::parseDouble).summaryStatistics();
+                    .mapToDouble(Double::parseDouble)
+                    .map(value -> value - mean) // Разница между значением и средним
+                    .map(diff -> diff * diff)   // Квадрат разницы
+                    .sum();                            // Сумма квадратов
+
+            // Шаг 3: Деление на (n - 1) для выборки и извлечение квадратного корня
+            double variance = sumOfSquares / (resultDTO.getCount() - 1); // Дисперсия (Variance)
+            double standardDeviation = Math.sqrt(variance);
+            resultDTO.setStandardDeviation(standardDeviation);
+
+        } // Поток secondStream закрывается здесь
+
+        // Вычисляем кол-во уникальных значений
+        try (Stream<String> thirdStream = validLinesSupplier.get()) {
+            Long uniqueValueCount = thirdStream
+                    // Получаем только значение
+                    .map(line -> line.split(",")[1])
+                    .mapToDouble(Double::parseDouble)
                     // Удаляем дубликаты из потока
-                    //.distinct()
-                    // Собираем в List
-                    //.collect(Collectors.toList());
-                    //.forEach(System.out::println); // Пример: вывести каждую строку
+                    .distinct()
+                    .count();
 
-            //System.out.println("Уникальные значения (List): " + uniqueValuesList);
+            resultDTO.setUniqueValuesCount(uniqueValueCount);
+      } // Поток thirdStream закрывается здесь
 
-            System.out.println("\nСтатистика:");
-            System.out.println("Кол-во валидных записей: " + stats.getCount());
-            System.out.println("Минимальное значение: " + stats.getMin());
-            System.out.println("Максимальное значение: " + stats.getMax());
-            System.out.println("Среднее значение: " + stats.getAverage());
+        // Вычисляем кол-во пропусков (строк без данных, с ошибкой)
+        try (Stream<String> fourthStream = linesSupplier.get()) {
+            Long allRowsCount = fourthStream.count();
+            Long invalidRowsCount = allRowsCount - resultDTO.getCount();
+            resultDTO.setInvalidRowsCount(invalidRowsCount);
+        } // Поток fourthStream закрывается здесь
 
-            System.out.println("Сумма: " + stats.getSum());
-
-
-
-
-
-
-
-
-        } catch (IOException e) {
-            System.err.println("Произошла ошибка при чтении файла: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return true;
+        return resultDTO;
     }
 }
 
