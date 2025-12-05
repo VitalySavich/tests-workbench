@@ -1,25 +1,29 @@
 package by.delaidelo.tests.testworks.mvc.controllers;
 
 import by.delaidelo.tests.testworks.dto.ResultDTO;
+import by.delaidelo.tests.testworks.services.ResultService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/files")
 @CrossOrigin("*")
 public class FileController {
+
+    private final ResultService service;
+    public FileController(ResultService service) {
+        this.service = service;
+    }
 
     /**
      * Проверяет, является ли строка валидным DateTime в указанном формате.
@@ -65,11 +69,35 @@ public class FileController {
     }
 
     @PostMapping("/analyze")
-    public ResultDTO analyze() {
+    public ResponseEntity<Long> analyze() {
 
-        Path filePath = Paths.get("D:/PROJECTS/InvLab/smalltest.txt"); // Укажите путь к вашему файлу
+        String fileName = "quotes_20mb.csv";
+        String fileTempStoragePath = "D:/PROJECTS/InvLab/";
+        String tempFilePath = fileTempStoragePath + fileName;
+
+        Path filePath = Paths.get(tempFilePath); // Укажите путь к вашему файлу
 
         ResultDTO resultDTO = new ResultDTO();
+
+        resultDTO.setFileName(fileName);
+        resultDTO.setTempFilePath(tempFilePath);
+
+        try {
+            // Получаем размер файла в байтах
+            long sizeInBytes = Files.size(filePath);
+
+            // Константы для перевода: 1 KB = 1024 B, 1 MB = 1024 KB
+            final double BYTES_PER_KB = 1024.0;
+            final double BYTES_PER_MB = BYTES_PER_KB * 1024.0;
+            double sizeInMB = sizeInBytes / BYTES_PER_MB;
+            resultDTO.setFileSizeInMB(sizeInMB);
+
+        } catch (IOException e) {
+            // Обработка случаев, когда файл не существует,
+            // нет прав доступа или произошла другая ошибка ввода/вывода
+            System.err.println("Ошибка при определении размера файла: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         // --- Создание Supplier<Stream<String>> ---
         // Эта лямбда-функция будет выполняться каждый раз при вызове .get()
@@ -93,6 +121,8 @@ public class FileController {
                 .filter(line -> isValidDateTime(line.split(",")[0], "yyyy-MM-dd'T'HH:mm:ss"))
                 // Приверка что второй элемент является валидным числом типа double
                 .filter(line -> isValidDouble(line.split(",")[1]));
+
+        long startTime = System.nanoTime(); // Засекаем время начала обработки
 
         // Собираем основную статистику
         try (Stream<String> firstStream = validLinesSupplier.get()) {
@@ -149,7 +179,15 @@ public class FileController {
             resultDTO.setInvalidRowsCount(invalidRowsCount);
         } // Поток fourthStream закрывается здесь
 
-        return resultDTO;
+        long endTime = System.nanoTime(); // Засекаем время окончания обработки
+
+        long durationInNano = endTime - startTime;
+        double durationInSeconds = durationInNano / 1_000_000_000.0;
+
+        resultDTO.setProcessingTime(durationInSeconds);
+
+        final var id = service.create(resultDTO);
+        return ResponseEntity.ok(id);
     }
 }
 
