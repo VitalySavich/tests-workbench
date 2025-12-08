@@ -1,9 +1,13 @@
 package by.delaidelo.tests.testworks.services;
 
+import by.delaidelo.tests.testworks.dao.ContractRepository;
 import by.delaidelo.tests.testworks.dao.ResultRepositry;
+import by.delaidelo.tests.testworks.dto.ContractDto;
 import by.delaidelo.tests.testworks.dto.ResultDTO;
 import by.delaidelo.tests.testworks.mappers.ResultMapper;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,14 @@ public class ResultService {
 
     public List<ResultDTO> findAllResults() {
         return resultRepositry.findAll().stream().map(mapper::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ResultDTO> find(String query, Pageable pageable) {
+        Page<ResultDTO> results = resultRepositry.findAll(ResultRepositry.buildSpecification(query), pageable)
+                .map(mapper::toDto);
+        return resultRepositry.findAll(ResultRepositry.buildSpecification(query), pageable)
+                .map(mapper::toDto);
     }
 
     @Transactional

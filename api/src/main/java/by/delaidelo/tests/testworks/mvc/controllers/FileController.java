@@ -1,7 +1,10 @@
 package by.delaidelo.tests.testworks.mvc.controllers;
 
+import by.delaidelo.tests.testworks.dto.ContractDto;
 import by.delaidelo.tests.testworks.dto.ResultDTO;
 import by.delaidelo.tests.testworks.services.ResultService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
@@ -68,10 +71,19 @@ public class FileController {
         }
     }
 
-    @PostMapping("/analyze")
-    public ResponseEntity<Long> analyze() {
+    @GetMapping("/history")
+    public Page<ResultDTO> find(@RequestParam(defaultValue = "") String query, Pageable pageable) {
+        return service.find(query, pageable);
+    }
 
-        String fileName = "quotes_20mb.csv";
+    @GetMapping("/history/{id:\\d+}")
+    public ResultDTO findById(@PathVariable Long id) {
+        return service.findById(id);
+    }
+
+    @PostMapping("/analyze")
+    public ResponseEntity<Long> analyze(@RequestParam String fileName) {
+
         String fileTempStoragePath = "D:/PROJECTS/InvLab/";
         String tempFilePath = fileTempStoragePath + fileName;
 
