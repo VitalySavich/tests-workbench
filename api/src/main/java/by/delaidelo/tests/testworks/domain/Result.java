@@ -3,14 +3,17 @@ package by.delaidelo.tests.testworks.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 @Entity
 @Table(name = "results")
-@Getter
-@Setter
+@Data
 public class Result extends AbstractEntity {
+    @Column
+    private String fileAnalyzeDateTime; // Дата-время анализа
+    @Column
+    private String author; // Имя файла
     @Column
     private String fileName; // Имя файла
     @Column

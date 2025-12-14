@@ -1,0 +1,94 @@
+<form [formGroup]="formGroup" (ngSubmit)="save()">
+    <div class="p-dialog">
+        <div class="p-dialog-header">
+            <span class="test-xl font-bold">
+                @if (resultId) {
+                <h5>Детальная информация по анализу номер {{ resultId }}</h5>
+                } @else {
+                <h5>Загрузить файл для анализа</h5>
+                }
+            </span>
+        </div>
+        <div class="p-dialog-content">
+            @if (resultId) {
+            <div class="flex flex-col gap-4 w-full sm:w-auto">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div class="flex-container">
+                        <!-- <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Дата-время анализа:</strong> {{ data.fileAnalyzeDateTime }}</p>
+                            </p-floatLabel>
+                        </div> -->
+                        <div class="flex-item">
+                            <p-floatLabel>
+                            <p><strong>Имя файла:</strong> {{ data.fileName }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Размер файла в Mb:</strong> {{ data.fileSizeInMB }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Время обработки в секундах:</strong> {{ data.processingTime }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Кол-во валидных записей:</strong> {{ data.count }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Минимальное значение:</strong> {{ data.minValue }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Максимальное значение:</strong> {{ data.maxValue }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Среднее значение:</strong> {{ data.average }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Стандартное отклонение:</strong> {{ data.standardDeviation }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Кол-во пропусков (строк без данных, с ошибкой):</strong> {{ data.invalidRowsCount }}</p>
+                            </p-floatLabel>
+                        </div>
+                        <div class="flex-item">
+                            <p-floatLabel>
+                                <p><strong>Кол-во уникальных значений:</strong> {{ data.uniqueValuesCount }}</p>
+                            </p-floatLabel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           } @else {
+                <div>
+                    <!-- Input для выбора файла. Событие (change) вызывает метод onFileSelected -->
+                    <input type="file" (change)="onFileSelected($event)">
+                    
+                   
+                </div>
+
+                <!-- Отображение статуса загрузки -->
+                <p>{{ uploadStatus }}</p>
+            } 
+        </div>
+
+        <div class="p-dialog-footer">    
+             <!-- Кнопка загрузки, при клике вызывает метод onUpload -->
+            <p-button label="Загрузить файл" (onClick)="onUpload()" [disabled]="!selectedFile"></p-button>        
+            <p-button label="Закрыть" type="button" (onClick)="close()" severity="success"></p-button>
+        </div>
+    </div>
+</form>

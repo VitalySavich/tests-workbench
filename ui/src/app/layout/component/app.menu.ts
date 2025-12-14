@@ -20,10 +20,10 @@ export class AppMenu {
 
     ngOnInit() {
         this.model = [
-            {
-                label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-            },
+            // {
+            //     label: 'Home',
+            //     items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+            // },
             /*
             {
                 label: 'UI Components',
@@ -93,30 +93,35 @@ export class AppMenu {
                         routerLink: ['/pages/empty']
                     },
                     */
+                    // {
+                    //     label: 'Склады',
+                    //     icon: 'pi pi-fw pi-truck',
+                    //     routerLink: ['/pages/warehouses']
+                    // },
+                    // {
+                    //     label: 'Номенклатура',
+                    //     icon: 'pi pi-fw pi-list',
+                    //     routerLink: ['/pages/item-types']
+                    // },
+                    // {
+                    //     label: 'Контрагенты',
+                    //     icon: 'pi pi-fw pi-users',
+                    //     routerLink: ['/pages/contractors']
+                    // },
+                    // {
+                    //     label: 'Договора',
+                    //     icon: 'pi pi-fw pi-credit-card',
+                    //     routerLink: ['/pages/contracts']
+                    // },
+                    // {
+                    //     label: 'Приходные документы',
+                    //     icon: 'pi pi-fw pi-file',
+                    //     routerLink: ['/pages/incoming-documents']
+                    // },
                     {
-                        label: 'Склады',
-                        icon: 'pi pi-fw pi-truck',
-                        routerLink: ['/pages/warehouses']
-                    },
-                    {
-                        label: 'Номенклатура',
+                        label: 'История анализов',
                         icon: 'pi pi-fw pi-list',
-                        routerLink: ['/pages/item-types']
-                    },
-                    {
-                        label: 'Контрагенты',
-                        icon: 'pi pi-fw pi-users',
-                        routerLink: ['/pages/contractors']
-                    },
-                    {
-                        label: 'Договора',
-                        icon: 'pi pi-fw pi-credit-card',
-                        routerLink: ['/pages/contracts']
-                    },
-                    {
-                        label: 'Приходные документы',
-                        icon: 'pi pi-fw pi-file',
-                        routerLink: ['/pages/incoming-documents']
+                        routerLink: ['/pages/history']
                     }                    
                 ]
             },

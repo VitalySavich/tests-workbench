@@ -2,11 +2,11 @@ package by.delaidelo.tests.testworks.dto;
 
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
 public class ResultDTO {
     private Long id;
+    private String fileAnalyzeDateTime; // Дата-время анализа
+    private String author; // Имя файла
     private String fileName; // Имя файла
     private String tempFilePath; // Путь к временному файлу
     private Double fileSizeInMB; // Размер файла в Mb

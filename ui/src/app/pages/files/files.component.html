@@ -1,0 +1,55 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">История анализов</div>
+    <p-table [value]="data"
+        [lazy]="true"
+        [paginator]="true"
+        [(rows)]="pageSize"
+        [(first)]="first"
+        [totalRecords]="totalRows"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        (onLazyLoad)="loadData($event)">
+        <ng-template #caption>
+            <div class="flex gap-4">
+                <span>
+                    <p-button icon="pi pi-plus" (onClick)="viewDetails()" label="Загрузить файл для анализа"></p-button>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th>#</th>
+                <th>Имя файла</th>
+                <th>Размер файла в Mb</th>
+                <th>Время обработки файла в секундах</th>
+                <th>Среднее значение</th>
+                <th>Стандартное отклонение</th>
+                <th>Детальная статистика</th>
+                <th>Улалить анализ</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.fileName}}</td>
+                <td>{{item.fileSizeInMB}}</td>
+                <td>{{item.processingTime}}</td>
+                <td>{{item.average}}</td>
+                <td>{{item.standardDeviation}}</td>                
+                <td>
+                   <p-button icon="pi pi-file" (onClick)="viewDetails(item.id)" label="Статистика"></p-button>
+                </td>
+                <td>
+                   <p-button icon="pi pi-trash" (onClick)="delete(item.id)" label="Удалить" severity="danger"></p-button>
+                </td> 
+            </tr>
+        </ng-template>
+        <!--
+        <ng-template #paginatorleft>
+            <p-button type="button" icon="pi pi-plus" text />
+        </ng-template>
+        <ng-template #paginatorright>
+            <p-button type="button" icon="pi pi-cloud" text />
+        </ng-template>
+        -->
+    </p-table>
+</div>

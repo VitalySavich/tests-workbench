@@ -2,6 +2,7 @@ package by.delaidelo.tests.testworks.services;
 
 import by.delaidelo.tests.testworks.dao.ContractRepository;
 import by.delaidelo.tests.testworks.dao.ResultRepositry;
+import by.delaidelo.tests.testworks.domain.Result;
 import by.delaidelo.tests.testworks.dto.ContractDto;
 import by.delaidelo.tests.testworks.dto.ResultDTO;
 import by.delaidelo.tests.testworks.mappers.ResultMapper;
@@ -37,16 +38,23 @@ public class ResultService {
 
     @Transactional
     public Long create(ResultDTO dto) {
-        final var r = mapper.fromDto(dto);
+        System.out.println(dto.toString());
+        final Result r = mapper.fromDto(dto);
+        //System.out.println(r.toString());
         resultRepositry.save(r);
         return r.getId();
     }
 
     @Transactional
     public void delete(@NotNull Long id) {
-        final var result = resultRepositry.findById(id).orElseThrow();
-        resultRepositry.delete(result);
+        resultRepositry.deleteById(id);
     }
+
+//    @Transactional
+//    public void delete(@NotNull Long id) {
+//        final var result = resultRepositry.findById(id).orElseThrow();
+//        resultRepositry.delete(result);
+//    }
 
     public ResultDTO findById(Long id) {
         return resultRepositry.findById(id)

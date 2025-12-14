@@ -1,12 +1,14 @@
 package by.delaidelo.tests.testworks.mvc.controllers;
 
-import by.delaidelo.tests.testworks.dto.ContractDto;
 import by.delaidelo.tests.testworks.dto.ResultDTO;
 import by.delaidelo.tests.testworks.services.ResultService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +24,9 @@ import java.util.stream.Stream;
 @RequestMapping("/files")
 @CrossOrigin("*")
 public class FileController {
+
+    // Временная директория, куда будут сохраняться файлы
+    private final String UPLOAD_DIR = "./uploads/";
 
     private final ResultService service;
     public FileController(ResultService service) {
@@ -82,17 +87,60 @@ public class FileController {
     }
 
     @PostMapping("/analyze")
-    public ResponseEntity<Long> analyze(@RequestParam String fileName) {
+    public ResponseEntity<String> analyze(@RequestParam("file") MultipartFile file) {
 
-        String fileTempStoragePath = "D:/PROJECTS/InvLab/";
-        String tempFilePath = fileTempStoragePath + fileName;
+        // 1. Проверяем, что файл не пустой
+        if (file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Файл пуст.");
+        }
 
-        Path filePath = Paths.get(tempFilePath); // Укажите путь к вашему файлу
+        String fileName = "";
+
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+
+        Path uploadFilePath = uploadPath;
+
+        try {
+            // 2. Нормализуем имя файла для безопасности (удаляем пути типа ../)
+            fileName = Objects.requireNonNull(file.getOriginalFilename());
+
+            // Создаем директорию, если она не существует
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // 3. Сохраняем файл на сервере
+            uploadFilePath = uploadPath.resolve(fileName);
+
+            // Проверяем если файл существует
+            if (Files.exists(uploadFilePath)) {
+                Files.delete(uploadFilePath);
+            }
+
+            // Используем Files.copy для перемещения потока файла в целевой путь
+            Files.copy(file.getInputStream(), uploadFilePath);
+
+
+        } catch (IOException e) {
+            // 5. Обрабатываем ошибки ввода/вывода (например, нет прав на запись)
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка сервера при сохранении файла: " + e.getMessage());
+        }
+
+        final Path filePath = uploadFilePath;
 
         ResultDTO resultDTO = new ResultDTO();
 
+        // Получаем текущую дату-время
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+        resultDTO.setFileAnalyzeDateTime(formattedDateTime);
+        System.out.println("Форматированный вывод: " + formattedDateTime);
+
         resultDTO.setFileName(fileName);
-        resultDTO.setTempFilePath(tempFilePath);
+        resultDTO.setTempFilePath(filePath.toAbsolutePath().toString());
+
 
         try {
             // Получаем размер файла в байтах
@@ -197,9 +245,17 @@ public class FileController {
         double durationInSeconds = durationInNano / 1_000_000_000.0;
 
         resultDTO.setProcessingTime(durationInSeconds);
+        resultDTO.setAuthor("Vitali");
 
         final var id = service.create(resultDTO);
-        return ResponseEntity.ok(id);
+
+        // 4. Возвращаем успешный ответ
+        return ResponseEntity.ok("Файл " + fileName + " успешно загружен и обработан. ID = " + id);
+   }
+
+    @DeleteMapping("/history/{id:\\d+}")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }
 
