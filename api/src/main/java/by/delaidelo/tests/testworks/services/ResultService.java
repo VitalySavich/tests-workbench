@@ -1,9 +1,7 @@
 package by.delaidelo.tests.testworks.services;
 
-import by.delaidelo.tests.testworks.dao.ContractRepository;
 import by.delaidelo.tests.testworks.dao.ResultRepositry;
 import by.delaidelo.tests.testworks.domain.Result;
-import by.delaidelo.tests.testworks.dto.ContractDto;
 import by.delaidelo.tests.testworks.dto.ResultDTO;
 import by.delaidelo.tests.testworks.mappers.ResultMapper;
 import jakarta.validation.constraints.NotNull;
