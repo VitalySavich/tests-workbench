@@ -2,7 +2,10 @@
     <div class="p-dialog">
         <div class="p-dialog-header">
             <span class="test-xl font-bold">
-                @if (resultId) {
+                @if (deleteMode) {
+                <h5>Вы действительно хотите удалить информацию по анализу номер {{ resultId }} ?</h5>
+                } 
+                @else if (resultId) {
                 <h5>Детальная информация по анализу номер {{ resultId }}</h5>
                 } @else {
                 <h5>Загрузить файл для анализа</h5>
@@ -76,6 +79,12 @@
                 <div>
                     <!-- Input для выбора файла. Событие (change) вызывает метод onFileSelected -->
                     <input type="file" (change)="onFileSelected($event)">
+
+                    <!-- <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" [multiple]="false" accept="image/*" maxFileSize="1000000" mode="advanced">
+                        <ng-template #empty>
+                            <div>Drag and drop files to here to upload.</div>
+                        </ng-template>
+                    </p-fileupload> -->
                     
                    
                 </div>
@@ -85,9 +94,14 @@
             } 
         </div>
 
-        <div class="p-dialog-footer">    
-             <!-- Кнопка загрузки, при клике вызывает метод onUpload -->
-            <p-button label="Загрузить файл" (onClick)="onUpload()" [disabled]="!selectedFile"></p-button>        
+        <div class="p-dialog-footer">  
+            @if (deleteMode) {
+                <p-button label="Удалить" type="button" (onClick)="delete(resultId)" severity="danger"></p-button>
+            } @else if (resultId) {
+            } @else {
+                <!-- Кнопка загрузки, при клике вызывает метод onUpload -->
+                <p-button label="Загрузить файл" (onClick)="onUpload()" [disabled]="!selectedFile"></p-button>
+            }         
             <p-button label="Закрыть" type="button" (onClick)="close()" severity="success"></p-button>
         </div>
     </div>

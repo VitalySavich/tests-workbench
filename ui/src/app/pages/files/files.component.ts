@@ -4,10 +4,7 @@ import { FileEditorComponent } from '@/components/file-editor/file-editor.compon
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Button } from "primeng/button";
 import { FormsModule } from '@angular/forms';
-import { InputText } from "primeng/inputtext";
-import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
-import { SelectListItemDto } from 'src/interfaces/select-list-item-dto';
-import { StyleClass } from "primeng/styleclass";
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { FileService } from '../service/file.servise';
 import { Result } from 'src/interfaces/result';
 
@@ -16,7 +13,7 @@ import { Result } from 'src/interfaces/result';
     templateUrl: './files.component.html',
     styleUrls: ['./files.component.css'],
     providers: [DialogService],
-    imports: [Button, TableModule, FormsModule, InputText, AutoCompleteModule]
+    imports: [Button, TableModule, FormsModule, AutoCompleteModule]
 })
 export class FilesComponent {
     data!: Result[];
@@ -57,16 +54,27 @@ export class FilesComponent {
                     resultId
                 },
             })
-            .onClose.subscribe((res) => {
-                if (res) {
-                    this.loadData({});
-                }
+            .onClose.subscribe((res) => {                
+                this.loadData({});                
             });
     }
 
-    delete(id: number) {
-        this.service.delete(id).subscribe(() => {
-            this.loadData({});
-        });
-    }
+    deleteDetails(resultId?: number) {
+        this.dialogService
+            .open(FileEditorComponent, {
+                width: '50vw',
+                modal: true,
+                breakpoints: {
+                    '960px': '75vw',
+                    '640px': '90vw'
+                },
+                data: {
+                    resultId, 
+                    deleteMode: true                                       
+                },                
+            })
+            .onClose.subscribe((res) => {                
+                this.loadData({});               
+            });
+    }    
 }
